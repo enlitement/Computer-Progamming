@@ -4,7 +4,7 @@ import java.awt.Container;
 
 import javax.swing.JApplet;
 
-public class Applet extends JApplet{
+public class WorkoutManagerApplet extends JApplet{
 	
 	private LoginView loginView;
 	private Container container;
