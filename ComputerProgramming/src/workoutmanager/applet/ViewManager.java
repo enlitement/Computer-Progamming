@@ -1,6 +1,6 @@
 package workoutmanager.applet;
 
-import java.util.ArrayList;
+import java.util.Stack;
 
 /**
  * A singleton class that manages all the different AbstractView classes.
@@ -10,45 +10,69 @@ import java.util.ArrayList;
  */
 public class ViewManager {
 
-	private ArrayList<AbstractView> viewList;
-	private WorkoutManagerApplet parent;
-	private ViewManager viewManager;
+	private Stack<AbstractView> viewStack;
+	private static WorkoutManagerApplet parent;
+	private static ViewManager viewManager;
 
 	private ViewManager(WorkoutManagerApplet parent) {
-		this.setParent(parent);
-		setViewList(new ArrayList<AbstractView>());
+		setParent(parent);
+		setViewStack(new Stack<AbstractView>());
 	}
-	
+
 	/**
 	 * Returns the singleton ViewManager object.
+	 * 
 	 * @return The ViewManager
 	 */
-	public ViewManager get() {
+	public static ViewManager get() {
 		if (viewManager == null)
 			viewManager = new ViewManager(parent);
 		return viewManager;
 	}
-	
-	/**
-	 * Removes the foremost state in 
-	 */
-	public void pop() {
 
+	/**
+	 * Adds a View to the view ArrayList.
+	 * 
+	 * @param view
+	 */
+	public void addView(AbstractView view) {
+		viewStack.push(view);
+		parent.getContentPane().add(view);
+		parent.repaint();
 	}
 
+	public void removeView(AbstractView view) {
+		viewStack.remove(view);
+		parent.getContentPane().remove(view);
+		parent.repaint();
+	}
+	/**
+	 * Removes the foremost state in the viewList and refreshes the window.
+	 */
+	public void pop() {
+		parent.getContentPane().remove(viewStack.peek());
+		viewStack.pop();
+		parent.repaint();
+	}
+
+	/**
+	 * Returns the WorkoutManagerApplet
+	 * 
+	 * @return parent WorkoutManagerApplet
+	 */
 	public WorkoutManagerApplet getParent() {
 		return parent;
 	}
 
-	public void setParent(WorkoutManagerApplet parent) {
-		this.parent = parent;
+	public static void setParent(WorkoutManagerApplet parent) {
+		ViewManager.parent = parent;
 	}
 
-	public ArrayList<AbstractView> getViewList() {
-		return viewList;
+	public Stack<AbstractView> getViewStack() {
+		return viewStack;
 	}
-
-	public void setViewList(ArrayList<AbstractView> viewList) {
-		this.viewList = viewList;
+	
+	public void setViewStack(Stack<AbstractView> viewStack) {
+		this.viewStack = viewStack;
 	}
 }

@@ -19,8 +19,8 @@ public class LoginView extends AbstractView {
 	/**
      * Creates new LoginView.
      */
-    public LoginView(Container container) {
-    	super(container);
+    public LoginView(ViewManager manager, Container container) {
+    	super(manager, container);
         initComponents();
         container.add(this);
     }
@@ -99,6 +99,8 @@ public class LoginView extends AbstractView {
     private void passwordFieldKeyPressed(java.awt.event.KeyEvent evt) {                                         
         if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
             submitButton.doClick();
+            ViewManager.get().addView(new MainView(getManager(), getParent()));
+            remove();
         }
     }                                        
 
@@ -112,6 +114,5 @@ public class LoginView extends AbstractView {
     private javax.swing.JButton submitButton;
     private javax.swing.JLabel userNameLabel;
     private javax.swing.JTextField usernameField;
-    private java.awt.Container container;
     // End of variables declaration
 }

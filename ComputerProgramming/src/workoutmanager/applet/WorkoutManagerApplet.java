@@ -6,7 +6,7 @@ import javax.swing.JApplet;
 
 public class WorkoutManagerApplet extends JApplet{
 	
-	private LoginView loginView;
+	private ViewManager viewManager;
 	private Container container;
 	
 	/**
@@ -15,8 +15,13 @@ public class WorkoutManagerApplet extends JApplet{
 	private static final long serialVersionUID = 1L;
 	
 	public void init() {
+		// Gets the content pane where we can work with layouts
 		container = getContentPane();
-		loginView = new LoginView(container);
+		// Sets the parent of the ViewManager to this JApplet
+		ViewManager.setParent(this);
+		// Creates the singleton class
+		viewManager = ViewManager.get();
+		// Adds a LoginView
+		viewManager.addView(new LoginView(viewManager, container));
 	}
-
 }

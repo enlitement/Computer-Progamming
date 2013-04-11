@@ -9,26 +9,43 @@ public abstract class AbstractView extends JPanel{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Container container;
+	private Container parent;
+	private ViewManager manager;
 	
-	public AbstractView(Container container) {
-		this.container = container;
+	public AbstractView(ViewManager manager, Container parent) {
+		this.parent = parent;
+		this.setManager(manager);
 	}
 	
 	/**
 	 * Returns the container for the JApplet.
 	 * @return
 	 */
-	public Container getContainer() {
-		return container;
+	public Container getParent() {
+		return this.parent;
 	}
 	
 	/**
 	 * Sets the container for this view.
 	 * @param container The java.awt.Container for the JApplet.
 	 */
-	public void setContainer(Container container) {
-		this.container = container;
+	public void setParent(Container parent) {
+		this.parent = parent;
+	}
+	
+	/**
+	 * Removes this View from the view stack and repaints the screen.
+	 */
+	public void remove() {
+		ViewManager.get().removeView(this);
+	}
+
+	public ViewManager getManager() {
+		return manager;
+	}
+
+	public void setManager(ViewManager manager) {
+		this.manager = manager;
 	}
 	
 }
