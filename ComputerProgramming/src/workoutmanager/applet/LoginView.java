@@ -20,7 +20,7 @@ public class LoginView extends AbstractView {
 	 */
 	private static final long serialVersionUID = 1L;
 	private boolean login_sucess = false;
-	
+
 	/**
 	 * Creates new LoginView.
 	 */
@@ -44,7 +44,7 @@ public class LoginView extends AbstractView {
 		passwordField = new javax.swing.JPasswordField();
 		submitButton = new javax.swing.JButton();
 		loginSucess = new javax.swing.JLabel();
-		
+
 		java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
 		layout.columnWidths = new int[] { 0, 7, 0, 7, 0, 7, 0 };
 		layout.rowHeights = new int[] { 0, 7, 0, 7, 0, 7, 0, 7, 0 };
@@ -61,13 +61,13 @@ public class LoginView extends AbstractView {
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 4;
 		add(passwordLabel, gridBagConstraints);
-		
+
 		loginSucess.setText(" ");
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 2;
 		gridBagConstraints.gridy = 0;
 		add(loginSucess, gridBagConstraints);
-		
+
 		usernameField.addKeyListener(new java.awt.event.KeyAdapter() {
 			public void keyPressed(java.awt.event.KeyEvent evt) {
 				usernameFieldKeyPressed(evt);
@@ -113,45 +113,47 @@ public class LoginView extends AbstractView {
 			login();
 		}
 	}
-	
+
 	private void login() {
 		submitButton.doClick();
-		if(login_sucess)
+		if (login_sucess)
 			createMainScreen();
 		else
 			login_failed();
-		System.out.println("Login sucess: "+ login_sucess);
 	}
-	
+
 	private void login_failed() {
 		loginSucess.setText("Login failed.");
 		repaint();
 	}
-	
+
 	private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {
-		try {
-			login_sucess = XMLReader.read2(
-					new URL(getDataBaseURL(usernameField.getText(),
-							passwordField.getPassword())), "status");
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private String getDataBaseURL(String username, String password) {
-		return "http://carlunger.se/login.php?username=" + username
-				+ "&password=" + password + "";
+		login_sucess = (XMLReader.read2(
+				getDataBaseURL(usernameField.getText(),
+						passwordField.getPassword()), "status"));
+		System.out.println("succes:"+login_sucess);
 	}
 
-	private String getDataBaseURL(String username, char[] password) {
+	private static URL getDataBaseURL(String username, String password) {
+		try {
+			return new URL("http://carlunger.se/login.php?username=" + username
+					+ "&password=" + password + "");
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private URL getDataBaseURL(String username, char[] password) {
 		return getDataBaseURL(username, String.copyValueOf(password));
 	}
-	
+
 	private void createMainScreen() {
 		ViewManager.get().addView(new MainView(getManager(), getParent()));
 		remove();
 	}
-	
+
 	// Variables declaration
 	private javax.swing.JPasswordField passwordField;
 	private javax.swing.JLabel passwordLabel;
